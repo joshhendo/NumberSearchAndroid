@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/LinearLayout01"
+              android:layout_width="fill_parent" android:layout_height="fill_parent"
+              xmlns:android="http://schemas.android.com/apk/res/android" android:background="#303030">
+    <ScrollView android:id="@+id/ScrollView01"
+                android:layout_width="fill_parent" android:layout_height="fill_parent" android:background="#303030">
+        <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical"
+                android:background="#303030"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                >
+            <TextView
+                    android:id="@+id/government_text_government_title"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Search Government"
+                    android:textSize="26sp"
+                    android:textColor="#ffffffff"
+                    android:padding="8sp"
+                    >
+            </TextView>
+            <TableLayout
+                    android:id="@+id/table_layout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="#303030"
+                    android:stretchColumns="0"
+                    >
+                <LinearLayout
+                        android:id="@+id/government_linear_layout_government_name"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:background="#303030"
+                        >
+                    <TextView
+                            android:id="@+id/government_text_government_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Department or Organisation"
+                            android:paddingLeft="10sp"
+                            >
+                    </TextView>
+                    <EditText
+                            android:id="@+id/government_edit_government_name"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="18sp"
+                            >
+                    </EditText>
+                </LinearLayout>
+                <LinearLayout
+                        android:id="@+id/linear_layout_location"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="left"
+                        android:background="#303030"
+                        >
+                    <TextView
+                            android:id="@+id/text_location"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Location"
+                            android:paddingLeft="10sp"
+                            >
+                    </TextView>
+                    <AutoCompleteTextView
+                            android:id="@+id/edit_location"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="18sp"
+                            >
+                    </AutoCompleteTextView>
+                </LinearLayout>
+            </TableLayout>
+            <Button android:id="@+id/government_button_search"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Search">
+            </Button>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

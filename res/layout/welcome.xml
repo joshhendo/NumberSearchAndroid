@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        android:id="@+id/welcome_relative_layout_1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:background="#303030"
+        >
+
+    <View
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_weight="1"/>
+
+    <TextView id="@+id/welcome_number_search"
+              android:text="Number Search"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:gravity="center_vertical|center_horizontal"
+              android:textColor="#8bd7ff"
+              android:textSize="30sp"
+            />
+    <TextView id="@+id/welcome_description"
+              android:text="Used for searching the Australian White Pages."
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:gravity="center_vertical|center_horizontal"
+              android:textColor="#ffffff"
+            />
+
+    <View
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_weight="1"/>
+
+    <LinearLayout
+            android:id="@+id/welcome_relative_layout_1"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            >
+
+        <RelativeLayout android:id="@+id/RelativeLayout01"
+                        android:layout_width="wrap_content"
+                        android:layout_weight="0.5"
+                        android:layout_height="fill_parent"
+                        xmlns:android="http://schemas.android.com/apk/res/android">
+            <ImageButton id="@+id/welcome_image_button_residential"
+                         android:src="@drawable/home_icon"
+                         android:scaleType="fitXY" 
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:layout_centerInParent="true"
+                         android:onClick="startResidential"
+                         android:background="@null"/>
+        </RelativeLayout>
+
+        <RelativeLayout android:id="@+id/RelativeLayout01"
+                        android:layout_width="wrap_content"
+                        android:layout_weight="0.5"
+                        android:layout_height="fill_parent"
+                        xmlns:android="http://schemas.android.com/apk/res/android">
+            <ImageButton id="@+id/welcome_image_button_business"
+                         android:src="@drawable/business_icon"
+                         android:scaleType="fitXY"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:layout_centerInParent="true"
+                         android:onClick="startBusiness"
+                         android:background="@null"/>
+        </RelativeLayout>
+
+        <RelativeLayout android:id="@+id/RelativeLayout01"
+                        android:layout_width="wrap_content"
+                        android:layout_weight="0.5"
+                        android:layout_height="fill_parent"
+                        xmlns:android="http://schemas.android.com/apk/res/android">
+            <ImageButton id="@+id/welcome_image_button_government"
+                         android:src="@drawable/government_icon"
+                         android:scaleType="fitXY"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:layout_centerInParent="true"
+                         android:onClick="startGovernment"
+                         android:background="@null"/>
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <View
+            android:layout_height="50sp"
+            android:layout_width="fill_parent"/>
+</LinearLayout>
