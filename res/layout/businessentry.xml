@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/LinearLayout01"
+              android:layout_width="fill_parent" android:layout_height="fill_parent"
+              xmlns:android="http://schemas.android.com/apk/res/android" android:background="#303030">
+    <ScrollView android:id="@+id/ScrollView01"
+                android:layout_width="fill_parent" android:layout_height="fill_parent" android:background="#303030">
+        <LinearLayout
+                android:id="@+id/widget33"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical"
+                android:background="#303030"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                >
+            <TextView
+                    android:id="@+id/entry_text_business_title"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="View Entry"
+                    android:textSize="26sp"
+                    android:textColor="#ffffffff"
+                    android:padding="8sp"
+                    >
+            </TextView>
+            <LinearLayout
+                android:id="@+id/vertical_container"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="#303030"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                >
+
+        </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

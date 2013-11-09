@@ -1,0 +1,10 @@
+Graphics from:\n
+- Logo Graphics by Tim Henderson.\n
+- Some icons from 2experts free icons set by Akhtar Sheikha at http://www.2expertsdesign.com.\n
+- Some icons used from the Android resources by Google.\n
+\n
+Used resources from:\n
+- MyLocation class from Stackoverflow user Fedor.\n
+- SQLite and Autocomplete tutorial  by Chad Lung from giantflyingsaucer.com.\n
+\n
+Number Search is created by Joshua Henderson.\n

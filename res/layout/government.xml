@@ -15,7 +15,7 @@
                     android:id="@+id/government_text_government_title"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="Search Government"
+                    android:text="Government"
                     android:textSize="26sp"
                     android:textColor="#ffffffff"
                     android:padding="8sp"
@@ -52,6 +52,20 @@
                             >
                     </EditText>
                 </LinearLayout>
+                <TableLayout
+                    android:id="@+id/table_layout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="#303030"
+                    android:stretchColumns="0"
+                    >
+                <TableRow
+                        android:id="@+id/table_row_1"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
                 <LinearLayout
                         android:id="@+id/linear_layout_location"
                         android:layout_width="fill_parent"
@@ -68,14 +82,41 @@
                             android:paddingLeft="10sp"
                             >
                     </TextView>
-                    <AutoCompleteTextView
-                            android:id="@+id/edit_location"
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:textSize="18sp"
-                            >
-                    </AutoCompleteTextView>
+                        <AutoCompleteTextView
+                                android:id="@+id/government_edit_government_location"
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="18sp"
+                                >
+                        </AutoCompleteTextView>
+
                 </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/linear_layout_location"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="left"
+                        android:background="#303030"
+                        >
+                        <TextView
+                            android:id="@+id/text_location"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=" "
+                            android:paddingLeft="10sp"
+                            >
+                    </TextView>
+                    <ImageButton
+                                android:id="@+id/government_button_location"
+                                android:layout_width="50sp"
+                                android:layout_height="50sp"
+                                android:layout_marginRight="6dip"
+                                android:src="@android:drawable/ic_menu_mylocation"
+                                android:focusable="false"/>
+                    </LinearLayout>
+                </TableRow>
+                </TableLayout>
             </TableLayout>
             <Button android:id="@+id/government_button_search"
                     android:layout_width="fill_parent"

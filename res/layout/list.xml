@@ -10,7 +10,6 @@
     android:layout_height="fill_parent"
     />
 <TextView
-    android:id="@+id/android:empty"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:text="@string/main_no_items"/>

@@ -13,7 +13,7 @@
             android:layout_width="fill_parent"
             android:layout_weight="1"/>
 
-    <TextView id="@+id/welcome_number_search"
+    <TextView android:id="@+id/welcome_number_search"
               android:text="Number Search"
               android:layout_width="fill_parent"
               android:layout_height="wrap_content"
@@ -21,7 +21,7 @@
               android:textColor="#8bd7ff"
               android:textSize="30sp"
             />
-    <TextView id="@+id/welcome_description"
+    <TextView android:id="@+id/welcome_description"
               android:text="Used for searching the Australian White Pages."
               android:layout_width="fill_parent"
               android:layout_height="wrap_content"
@@ -48,14 +48,15 @@
                         android:layout_weight="0.5"
                         android:layout_height="fill_parent"
                         xmlns:android="http://schemas.android.com/apk/res/android">
-            <ImageButton id="@+id/welcome_image_button_residential"
-                         android:src="@drawable/home_icon"
+            <ImageButton android:id="@+id/welcome_image_button_residential"
+                         android:src="@drawable/residential_icon"
                          android:scaleType="fitXY" 
                          android:layout_width="wrap_content"
                          android:layout_height="wrap_content"
                          android:layout_centerInParent="true"
                          android:onClick="startResidential"
-                         android:background="@null"/>
+                         android:background="@null"
+                         />
         </RelativeLayout>
 
         <RelativeLayout android:id="@+id/RelativeLayout01"
@@ -63,7 +64,7 @@
                         android:layout_weight="0.5"
                         android:layout_height="fill_parent"
                         xmlns:android="http://schemas.android.com/apk/res/android">
-            <ImageButton id="@+id/welcome_image_button_business"
+            <ImageButton android:id="@+id/welcome_image_button_business"
                          android:src="@drawable/business_icon"
                          android:scaleType="fitXY"
                          android:layout_width="wrap_content"
@@ -78,7 +79,7 @@
                         android:layout_weight="0.5"
                         android:layout_height="fill_parent"
                         xmlns:android="http://schemas.android.com/apk/res/android">
-            <ImageButton id="@+id/welcome_image_button_government"
+            <ImageButton android:id="@+id/welcome_image_button_government"
                          android:src="@drawable/government_icon"
                          android:scaleType="fitXY"
                          android:layout_width="wrap_content"

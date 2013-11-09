@@ -1,30 +1,24 @@
 package com.joshhendo.numbersearch;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.XmlResourceParser;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.*;
+import com.joshhendo.numbersearch.base.SearchScreen;
+import com.joshhendo.numbersearch.database.adapter.LocationDatabaseAdapter;
+import com.joshhendo.numbersearch.database.adapter.ResidentialDatabaseAdapter;
 import com.joshhendo.numbersearch.structures.Contact;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
+import com.joshhendo.numbersearch.views.ViewPastSearchesResidential;
+import com.joshhendo.numbersearch.views.ViewResidentialList;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
+import java.sql.SQLException;
 
 /**
  * com.com.joshhendo.joshhendo.joshhendo.numbersearch Copyright 2011
@@ -33,18 +27,41 @@ import java.util.ArrayList;
  * Time: 7:29 PM
  */
 
-public class SearchResidential extends Activity
+public class SearchResidential extends SearchScreen
 {
     private static final int CONTACT_PICKER_RESULT = 1001;
+    private static final int HISTORY_RESULT = 1002;
     public static final String DEBUG_TAG = "NumberSearchDebug";
 
     Context gContext = null;
     Contact contact = null;
     Uri selectedContact = null;
 
-    EditText surname = null;
+    AutoCompleteTextView surname = null;
     EditText initial = null;
-    AutoCompleteTextView location = null;
+    AutoCompleteTextView txtLocation = null;
+    Button search = null;
+    ImageButton currentlocation = null;
+    
+
+
+    private ResidentialDatabaseAdapter residentialDatabaseAdapter;
+    private LocationDatabaseAdapter locationDatabaseAdapter;
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState)
+    {
+        onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+
+        residentialDatabaseAdapter.close();
+        locationDatabaseAdapter.close();
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -54,22 +71,40 @@ public class SearchResidential extends Activity
 
         gContext = this;
 
-        surname = (EditText) findViewById(R.id.edit_lastname);
+        surname = (AutoCompleteTextView) findViewById(R.id.edit_lastname);
         initial = (EditText) findViewById(R.id.edit_initial);
-        location = (AutoCompleteTextView) findViewById(R.id.edit_location);
+        txtLocation = (AutoCompleteTextView) findViewById(R.id.edit_location);
+
+        // Get current locaton button
+        currentlocation = (ImageButton) findViewById(R.id.button_location);
+        setGetCurrentLocation(currentlocation, txtLocation, gContext);
 
         // Search button
-        Button search = (Button) findViewById(R.id.button_search);
+        search = (Button) findViewById(R.id.button_search);
         search.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View view)
             {
-                // Create a fetcher object to pass to the intent.
-                Fetcher fetcher = new Fetcher(surname.getText().toString(), initial.getText().toString(), location.getText().toString(), 1);
+                // Validate input fields first
+                if ( ! validateInputFields(surname.getText().toString(), txtLocation.getText().toString()))
+                {
+                    Toast.makeText(gContext, gContext.getString(R.string.surname_location_valid_search), Toast.LENGTH_SHORT).show();
+                    return ;
+                }
 
-                Intent intent = new Intent(SearchResidential.this, PhoneListView.class);
+                // Add current search to database
+                AddToDatabase(surname.getText().toString(), initial.getText().toString(), txtLocation.getText().toString());
+
+                // Create a fetcher object to pass to the intent.
+                FetcherResidential fetcher = new FetcherResidential(surname.getText().toString(), initial.getText().toString(), txtLocation.getText().toString(), 1);
+
+                Intent intent = new Intent(SearchResidential.this, ViewResidentialList.class);
                 intent.putExtra("FETCHER", fetcher);
-                intent.putExtra("CONTACT", selectedContact.toString());
+                if (selectedContact != null)
+                {
+                    intent.putExtra("CONTACT", selectedContact.toString());
+                }
+
                 startActivity(intent);
             }
         });
@@ -83,81 +118,84 @@ public class SearchResidential extends Activity
                 doLaunchContactPicker();
             }
         });
-    }
-
-    // This one actually crashed android! :(
-    private void ReadRawResourceIntoArray(ArrayList list, int resource)
-    {
-        try
+        
+        // Clear the location field if it's using the "Current" location
+        txtLocation.setOnFocusChangeListener(new View.OnFocusChangeListener()
         {
-            InputStream is = getResources().openRawResource(R.raw.suburbs);
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = dbf.newDocumentBuilder();
-
-            Document doc = db.parse(is);
-
-            doc.getDocumentElement().normalize();
-
-            NodeList nodeList = doc.getElementsByTagName("item");
-
-            for ( int s = 0; s < nodeList.getLength(); s++)
+            public void onFocusChange(View view, boolean hasFocus)
             {
-                Node node = nodeList.item(s);
-                
-                Toast.makeText(gContext, node.getTextContent(), Toast.LENGTH_SHORT).show();
-            }
-        }
-        catch (Exception e)
-        {
-            System.out.println("XML Pasing Excpetion = " + e);
-        }
-
-    }
-
-    // This one still crashed on large lists on emulator, but not on phone. Disappointing. To use, pass R.xml.suburbs to it
-    private void ReadResourceIntoArray(ArrayList list, int resource)
-    {
-        System.out.println("Starting XML thingo");
-        Toast.makeText(gContext, "starting XML thingo", Toast.LENGTH_SHORT).show();
-
-        XmlResourceParser parser = gContext.getResources().getXml(resource);
-
-        try
-        {
-            int eventType = parser.getEventType();
-
-            while (eventType != XmlPullParser.END_DOCUMENT)
-            {
-                String name = null;
-
-                switch (eventType)
+                if (hasFocus)
                 {
-                    case XmlPullParser.START_TAG:
-                        // handle open tags
-                        break;
-                    case XmlPullParser.END_TAG:
-                        // handle close tags
-                        break;
-                    case XmlPullParser.TEXT:
-                        list.add(parser.getText());
-                        break;
+                    if (usingCurrentLocation)
+                    {
+                        txtLocation.setText("");
+                        usingCurrentLocation = false;
+                    }
                 }
-
-                eventType = parser.next();
             }
-        }
-        catch (XmlPullParserException e)
+        });
+
+        if (this.residentialDatabaseAdapter == null)
+            this.residentialDatabaseAdapter = new ResidentialDatabaseAdapter(this);
+
+        if (this.locationDatabaseAdapter == null)
+            this.locationDatabaseAdapter = new LocationDatabaseAdapter(this);
+
+        setAutoComplete(surname, residentialDatabaseAdapter, ResidentialDatabaseAdapter.KEY_LASTNAME);
+        setAutoComplete(txtLocation, locationDatabaseAdapter, LocationDatabaseAdapter.KEY_VALUE);
+    }
+
+
+
+
+    private boolean validateInputFields(String surname, String location)
+    {
+        return (surname != null || location != null) || (surname.length() > 0 || location.length() > 0);
+    }
+
+    // Create options menu
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.residentialoptions, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch(item.getItemId())
         {
-            throw new RuntimeException("Cannot parse XML");
+            case R.id.pastSearches:
+                Intent intent = new Intent(SearchResidential.this, ViewPastSearchesResidential.class);
+                startActivityForResult(intent, HISTORY_RESULT);
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        catch (IOException e)
+    }
+
+    private boolean AddToDatabase(String surname, String initial, String location)
+    {
+        ResidentialDatabaseAdapter residentialDatabaseAdapter = new ResidentialDatabaseAdapter(gContext);
+        
+        try
         {
-            throw new RuntimeException("Cannot parse XML");
+            residentialDatabaseAdapter.open();
+            residentialDatabaseAdapter.createPastEntry(surname, initial, location);
+        }
+        catch (SQLException e)
+        {
+            return false;
         }
         finally
         {
-            parser.close();
+            residentialDatabaseAdapter.close();
         }
+
+        return true;
     }
 
     private void doLaunchContactPicker()
@@ -176,7 +214,7 @@ public class SearchResidential extends Activity
                     // Clear current fields
                     surname.setText("");
                     initial.setText("");
-                    location.setText("");
+                    txtLocation.setText("");
 
                     Cursor cursor = null;
                     contact = new Contact();
@@ -197,10 +235,11 @@ public class SearchResidential extends Activity
                             surname.setText(contact.getSurname());
                             initial.setText(contact.getInitials());
                         }
+                        cursor.close();
                     }
                     catch (Exception e)
                     {
-
+                        return;
                     }
 
                     // Get Suburb and Postcode
@@ -223,13 +262,41 @@ public class SearchResidential extends Activity
                             contact.setSuburb(suburb);
                             contact.setState(state);
 
-                            location.setText(contact.getLocation());
+                            txtLocation.setText(contact.getLocation());
                         }
+                        cursor.close();
                     }
                     catch (Exception e)
                     {
-
+                        return;
                     }
+
+                    break;
+
+                case HISTORY_RESULT:
+
+                    Bundle extras = data.getExtras();
+                    
+                    if (extras != null)
+                    {
+                        surname.setFocusable(false);
+                        surname.setFocusableInTouchMode(false);
+
+                        txtLocation.setFocusable(false);
+                        txtLocation.setFocusableInTouchMode(false);
+
+                        surname.setText(extras.getString("surname"));
+                        initial.setText(extras.getString("initial"));
+                        txtLocation.setText(extras.getString("location"));
+
+                        surname.setFocusable(true);
+                        surname.setFocusableInTouchMode(true);
+
+                        txtLocation.setFocusable(true);
+                        txtLocation.setFocusableInTouchMode(true);
+                    }
+
+                    break;
             }
         }
     }

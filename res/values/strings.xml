@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">NumberSearch</string>
+    <string name="app_name">Number Search</string>
     <string name="main_no_items">No orders to display</string>
+    <string name="no_location">Couldn\'t determine current location.</string>
+    <string name="no_results">No results found.</string>
+    <string name="searching_location">Searching for current location.</string>
+    <string name="retrieving_data">Retrieving data.</string>
+    <string name="please_wait">Please wait...</string>
+    <string name="surname_location_valid_search">Must include both a surname and locaton for a valid search.</string>
+    <string name="format_address">%1$s %2$s %3$s %4$s Australia</string>
 </resources>
